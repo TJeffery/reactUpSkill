@@ -15,6 +15,12 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import {
+    ContextMenu,
+    ContextMenuContent,
+    ContextMenuItem,
+    ContextMenuTrigger,
+} from "@/components/ui/context-menu"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
@@ -55,16 +61,23 @@ export function DataTable<TData, TValue>({
                 <TableBody>
                     {table.getRowModel().rows?.length ? (
                         table.getRowModel().rows.map((row) => (
-                            <TableRow
-                                key={row.id}
-                                data-state={row.getIsSelected() && "selected"}
-                            >
-                                {row.getVisibleCells().map((cell) => (
-                                    <TableCell key={cell.id}>
-                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
+                            <ContextMenu key={row.id}>
+                                <ContextMenuTrigger asChild>
+                                    <TableRow data-state={row.getIsSelected() && "selected"}>
+                                        {row.getVisibleCells().map((cell) => (
+                                            <TableCell key={cell.id}>
+                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                            </TableCell>
+                                        ))}
+                                    </TableRow>
+                                </ContextMenuTrigger>
+                                <ContextMenuContent>
+                                    <ContextMenuItem>Profile</ContextMenuItem>
+                                    <ContextMenuItem>Billing</ContextMenuItem>
+                                    <ContextMenuItem>Team</ContextMenuItem>
+                                    <ContextMenuItem>Subscription</ContextMenuItem>
+                                </ContextMenuContent>
+                            </ContextMenu>
                         ))
                     ) : (
                         <TableRow>

@@ -2,7 +2,7 @@ import { type BreadcrumbItem, } from '@/types';
 import { Head } from '@inertiajs/react';
 import { DataTable } from '@/components/data-table';
 import AppLayout from '@/layouts/app-layout';
-
+import { router } from "@inertiajs/react";
 import { ColumnDef } from "@tanstack/react-table"
 
 
@@ -17,17 +17,44 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Checkbox } from '@/components/ui/checkbox';
+import { useState } from 'react';
 
 
 type Task = {
     id: string
-    title: string
+    completed: boolean
+    task: string
+    description: string
 }
+
+const handleUpdate = (taskId: string) => {
+    console.log('Updating task:', taskId);
+
+    router.put(route('tasks.update', taskId), {} , {
+        onFinish: () => {
+            router.get(route('tasks.index'));
+        },
+    });
+};
+
 
 const columns: ColumnDef<Task>[] = [
     {
-        accessorKey: "id",
-        header: "ID",
+        accessorKey: "completed",
+        header: "",
+        cell: ({ row }) => {
+            const task = row.original;
+            let completed: boolean;
+            [completed] = useState(task.completed);
+
+            return (
+                <Checkbox
+                    checked={completed}
+                    onCheckedChange={(checked) => handleUpdate(task.id)}
+                />
+            )
+        },
     },
     {
         accessorKey: "title",
@@ -47,15 +74,9 @@ const columns: ColumnDef<Task>[] = [
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(task.title)}
-                        >
-                            Copy payment ID
+                        <DropdownMenuItem onClick={() => handleUpdate(task.id)}>
+                            Toggle Completed
                         </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem>View customer</DropdownMenuItem>
-                        <DropdownMenuItem>View payment details</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             )
@@ -79,7 +100,6 @@ export default function Index( { tasks }) {
                 <Head title="Tasks" />
                 <span className="text-white">hello world</span>
                 <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
-
                     <DataTable data={tasks} columns={columns} />
                 </div>
             </AppLayout>

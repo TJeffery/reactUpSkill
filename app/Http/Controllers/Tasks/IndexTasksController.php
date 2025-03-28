@@ -11,11 +11,10 @@ class IndexTasksController extends Controller
 {
     public function __invoke(Request $request): \Inertia\Response
     {
-        $user = auth()->user()->load('tasks');
-
+        $tasks = auth()->user()->tasks()->orderBy('id', 'desc')->get();
 
         return Inertia::render('Tasks/Index', [
-            'tasks' => $user->tasks,
+            'tasks' => $tasks,
         ]);
     }
 }

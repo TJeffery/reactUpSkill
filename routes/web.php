@@ -12,6 +12,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
     Route::get('tasks', \App\Http\Controllers\Tasks\IndexTasksController::class)->name('tasks.index');
+    Route::put('tasks/{task}/update', \App\Http\Controllers\Tasks\UpdateTasksController::class)->name('tasks.update');
 });
 
 require __DIR__.'/settings.php';
