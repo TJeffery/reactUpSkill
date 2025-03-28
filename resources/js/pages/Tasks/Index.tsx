@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Checkbox } from '@/components/ui/checkbox';
 import { useState } from 'react';
-
+import TaskForm from "@/components/task-form";
 
 type Task = {
     id: string
@@ -109,6 +109,7 @@ export default function Index( { tasks }) {
             <AppLayout breadcrumbs={breadcrumbs}>
                 <Head title="Tasks" />
                 <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
+                    <TaskForm />
                     <DataTable data={tasks} columns={columns} />
                 </div>
             </AppLayout>
