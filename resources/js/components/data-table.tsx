@@ -21,11 +21,25 @@ import {
     ContextMenuItem,
     ContextMenuTrigger,
 } from "@/components/ui/context-menu"
+import { router } from '@inertiajs/react';
+import { SquareCheckBigIcon, Trash2, X } from 'lucide-react';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
 }
+
+const handleUpdate = (taskId: string) => {
+    router.put(route('tasks.update', taskId), {} , {
+        onFinish: () => {
+            router.get(route('tasks.index'));
+        },
+    });
+};
+
+const handleDelete = (taskId: string) => {
+    router.delete(route('tasks.delete', taskId));
+};
 
 export function DataTable<TData, TValue>({
                                              columns,
@@ -72,10 +86,14 @@ export function DataTable<TData, TValue>({
                                     </TableRow>
                                 </ContextMenuTrigger>
                                 <ContextMenuContent>
-                                    <ContextMenuItem>Profile</ContextMenuItem>
-                                    <ContextMenuItem>Billing</ContextMenuItem>
-                                    <ContextMenuItem>Team</ContextMenuItem>
-                                    <ContextMenuItem>Subscription</ContextMenuItem>
+                                    <ContextMenuItem onClick={() => handleUpdate(row.original.id)}>
+                                        { row.original.completed ? <SquareCheckBigIcon className="w-4 h-4 mr-2" /> : <X className="w-4 h-4 mr-2" /> }
+                                        Toggle
+                                    </ContextMenuItem>
+                                    <ContextMenuItem onClick={() => handleDelete(row.original.id)}>
+                                        <Trash2 className="w-4 h-4 mr-2" />
+                                        Delete
+                                    </ContextMenuItem>
                                 </ContextMenuContent>
                             </ContextMenu>
                         ))

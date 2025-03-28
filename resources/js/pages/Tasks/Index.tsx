@@ -18,8 +18,6 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Checkbox } from '@/components/ui/checkbox';
@@ -110,7 +108,6 @@ export default function Index( { tasks }) {
         <>
             <AppLayout breadcrumbs={breadcrumbs}>
                 <Head title="Tasks" />
-                <span className="text-white">hello world</span>
                 <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4">
                     <DataTable data={tasks} columns={columns} />
                 </div>
