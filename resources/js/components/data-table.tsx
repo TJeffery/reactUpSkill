@@ -76,7 +76,7 @@ export function DataTable<TData, TValue>({
                     {table.getRowModel().rows?.length ? (
                         table.getRowModel().rows.map((row) => (
                             <ContextMenu key={row.id}>
-                                <ContextMenuTrigger asChild>
+                                <ContextMenuTrigger asChild onClick={() => handleUpdate(row.original.id)}>
                                     <TableRow data-state={row.getIsSelected() && "selected"}>
                                         {row.getVisibleCells().map((cell) => (
                                             <TableCell key={cell.id}>
