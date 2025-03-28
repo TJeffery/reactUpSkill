@@ -6,7 +6,12 @@ import { router } from "@inertiajs/react";
 import { ColumnDef } from "@tanstack/react-table"
 
 
-import { MoreHorizontal } from "lucide-react"
+import {
+    MoreHorizontal,
+    Trash2,
+    SquareCheckBigIcon,
+    X
+} from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -29,13 +34,15 @@ type Task = {
 }
 
 const handleUpdate = (taskId: string) => {
-    console.log('Updating task:', taskId);
-
     router.put(route('tasks.update', taskId), {} , {
         onFinish: () => {
             router.get(route('tasks.index'));
         },
     });
+};
+
+const handleDelete = (taskId: string) => {
+    router.delete(route('tasks.delete', taskId));
 };
 
 
@@ -75,7 +82,12 @@ const columns: ColumnDef<Task>[] = [
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => handleUpdate(task.id)}>
-                            Toggle Completed
+                            { task.completed ? <SquareCheckBigIcon className="w-4 h-4 mr-2" /> : <X className="w-4 h-4 mr-2" /> }
+                            Toggle
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleDelete(task.id)}>
+                            <Trash2 className="w-4 h-4 mr-2" />
+                            Delete
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

@@ -12,13 +12,9 @@ class UpdateTasksController extends Controller
 {
     public function __invoke(Request $request, Task $task)
     {
-        $user = auth()->user()->load('tasks');
-
         $task->completed = !$task->completed;
 
         $task->save();
 
-        ray('here');
-        return redirect()->back();
     }
 }

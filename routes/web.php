@@ -13,6 +13,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     })->name('dashboard');
     Route::get('tasks', \App\Http\Controllers\Tasks\IndexTasksController::class)->name('tasks.index');
     Route::put('tasks/{task}/update', \App\Http\Controllers\Tasks\UpdateTasksController::class)->name('tasks.update');
+    Route::delete('tasks/{task}/delete', \App\Http\Controllers\Tasks\DeleteTasksController::class)->name('tasks.delete');
 });
 
 require __DIR__.'/settings.php';
