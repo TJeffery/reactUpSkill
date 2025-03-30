@@ -1,15 +1,29 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { router } from "@inertiajs/react";
 
-export default function TaskForm() {
-    const [form, setForm] = useState({
-        title: "",
-        description: "",
-    });
+interface Task {
+    id: number;
+    title: string;
+    description: string;
+}
 
+interface TaskFormProps {
+    task?: Task; // Optional task for editing
+    onSuccess?: () => void; // Callback after success
+}
+
+export default function TaskForm({ task, onSuccess }: TaskFormProps) {
+    const [form, setForm] = useState({ title: "", description: "" });
     const [errors, setErrors] = useState<Record<string, string>>({});
+
+    // Pre-fill form when editing
+    useEffect(() => {
+        if (task) {
+            setForm({ title: task.title, description: task.description });
+        }
+    }, [task]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -19,12 +33,24 @@ export default function TaskForm() {
         e.preventDefault();
         setErrors({}); // Clear previous errors
 
-        router.post(route("tasks.store"), form, {
-            onError: (errorResponse) => setErrors(errorResponse),
-            onSuccess: () => {
-                setForm({ title: "", description: "" }); // Reset form after success
-            },
-        });
+        if (task) {
+            // Update task
+            router.put(route("tasks.update", task.id), form, {
+                onError: (errorResponse) => setErrors(errorResponse),
+                onSuccess: () => {
+                    if (onSuccess) onSuccess();
+                },
+            });
+        } else {
+            // Create new task
+            router.post(route("tasks.store"), form, {
+                onError: (errorResponse) => setErrors(errorResponse),
+                onSuccess: () => {
+                    setForm({ title: "", description: "" }); // Reset form
+                    if (onSuccess) onSuccess();
+                },
+            });
+        }
     };
 
     return (
@@ -56,7 +82,7 @@ export default function TaskForm() {
                 type="submit"
                 className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
             >
-                Add Task
+                {task ? "Update Task" : "Add Task"}
             </button>
         </form>
     );

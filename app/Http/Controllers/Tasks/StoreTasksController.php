@@ -14,7 +14,7 @@ class StoreTasksController extends Controller
             'title' => 'required',
             'description' => 'required',
         ]);
-
+ray('hi');
         auth()->user()->tasks()->create([
             'title' => $request->title,
             'description' => $request->description,
