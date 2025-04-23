@@ -22,4 +22,13 @@ export default defineConfig({
             'ziggy-js': resolve(__dirname, 'vendor/tightenco/ziggy'),
         },
     },
+    server: {
+        host: '0.0.0.0', // Allows access from the network
+        port: 5173,
+        strictPort: true, // Ensures it uses 5173 only
+        hmr: {
+            clientPort: 5173, // Ensures WebSocket connects on the correct port
+            host: 'reactupskill.test', // Change this to match your local domain
+        },
+    },
 });
